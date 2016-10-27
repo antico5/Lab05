@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -25,6 +26,7 @@ public class TareaCursorAdapter extends CursorAdapter {
     private LayoutInflater inflador;
     private ProyectoDAO myDao;
     private Context contexto;
+    private long tiempo;
     public TareaCursorAdapter (Context contexto, Cursor c, ProyectoDAO dao) {
         super(contexto, c, false);
         myDao= dao;
@@ -43,6 +45,8 @@ public class TareaCursorAdapter extends CursorAdapter {
     public void bindView(View view, final Context context, final Cursor cursor) {
         //obtener la posicion de la fila actual y asignarla a los botones y checkboxes
         int pos = cursor.getPosition();
+        int id = cursor.getInt(cursor.getColumnIndex("_id"));
+
 
         // Referencias UI.
         TextView nombre= (TextView) view.findViewById(R.id.tareaTitulo);
@@ -68,7 +72,7 @@ public class TareaCursorAdapter extends CursorAdapter {
         finalizada.setChecked(cursor.getInt(cursor.getColumnIndex(ProyectoDBMetadata.TablaTareasMetadata.FINALIZADA))==1);
         finalizada.setTextIsSelectable(false);
 
-        btnEditar.setTag(cursor.getInt(cursor.getColumnIndex("_id")));
+        btnEditar.setTag(id);
         btnEditar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,7 +84,7 @@ public class TareaCursorAdapter extends CursorAdapter {
             }
         });
 
-        btnFinalizar.setTag(cursor.getInt(cursor.getColumnIndex("_id")));
+        btnFinalizar.setTag(id);
         btnFinalizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,6 +97,24 @@ public class TareaCursorAdapter extends CursorAdapter {
                     }
                 });
                 backGroundUpdate.start();
+            }
+        });
+
+        btnEstado.setTag(id);
+        btnEstado.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    tiempo = System.currentTimeMillis();
+                }
+                else {
+                    long diferencia = System.currentTimeMillis() - tiempo;
+                    long minutos = (diferencia/5000);
+                    int id = (int) buttonView.getTag();
+                    myDao.agregarMinutos(id,minutos);
+
+                }
+
             }
         });
     }

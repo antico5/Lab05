@@ -17,49 +17,53 @@ import dam.isi.frsf.utn.edu.ar.lab05.modelo.Usuario;
  */
 public class ProyectoDAO {
 
-    private static final String _SQL_TAREAS_X_PROYECTO = "SELECT "+ProyectoDBMetadata.TABLA_TAREAS_ALIAS+"."+ProyectoDBMetadata.TablaTareasMetadata._ID+" as "+ProyectoDBMetadata.TablaTareasMetadata._ID+
-            ", "+ProyectoDBMetadata.TablaTareasMetadata.TAREA +
-            ", "+ProyectoDBMetadata.TablaTareasMetadata.HORAS_PLANIFICADAS +
-            ", "+ProyectoDBMetadata.TablaTareasMetadata.MINUTOS_TRABAJADOS +
-            ", "+ProyectoDBMetadata.TablaTareasMetadata.FINALIZADA +
-            ", "+ProyectoDBMetadata.TablaTareasMetadata.PRIORIDAD +
-            ", "+ProyectoDBMetadata.TABLA_PRIORIDAD_ALIAS+"."+ProyectoDBMetadata.TablaPrioridadMetadata.PRIORIDAD +" as "+ProyectoDBMetadata.TablaPrioridadMetadata.PRIORIDAD_ALIAS+
-            ", "+ProyectoDBMetadata.TablaTareasMetadata.RESPONSABLE +
-            ", "+ProyectoDBMetadata.TABLA_USUARIOS_ALIAS+"."+ProyectoDBMetadata.TablaUsuariosMetadata.USUARIO +" as "+ProyectoDBMetadata.TablaUsuariosMetadata.USUARIO_ALIAS+
-            " FROM "+ProyectoDBMetadata.TABLA_PROYECTO + " "+ProyectoDBMetadata.TABLA_PROYECTO_ALIAS+", "+
-            ProyectoDBMetadata.TABLA_USUARIOS + " "+ProyectoDBMetadata.TABLA_USUARIOS_ALIAS+", "+
-            ProyectoDBMetadata.TABLA_PRIORIDAD + " "+ProyectoDBMetadata.TABLA_PRIORIDAD_ALIAS+", "+
-            ProyectoDBMetadata.TABLA_TAREAS + " "+ProyectoDBMetadata.TABLA_TAREAS_ALIAS+
-            " WHERE "+ProyectoDBMetadata.TABLA_TAREAS_ALIAS+"."+ProyectoDBMetadata.TablaTareasMetadata.PROYECTO+" = "+ProyectoDBMetadata.TABLA_PROYECTO_ALIAS+"."+ProyectoDBMetadata.TablaProyectoMetadata._ID +" AND "+
-            ProyectoDBMetadata.TABLA_TAREAS_ALIAS+"."+ProyectoDBMetadata.TablaTareasMetadata.RESPONSABLE+" = "+ProyectoDBMetadata.TABLA_USUARIOS_ALIAS+"."+ProyectoDBMetadata.TablaUsuariosMetadata._ID +" AND "+
-            ProyectoDBMetadata.TABLA_TAREAS_ALIAS+"."+ProyectoDBMetadata.TablaTareasMetadata.PRIORIDAD+" = "+ProyectoDBMetadata.TABLA_PRIORIDAD_ALIAS+"."+ProyectoDBMetadata.TablaPrioridadMetadata._ID +" AND "+
-            ProyectoDBMetadata.TABLA_TAREAS_ALIAS+"."+ProyectoDBMetadata.TablaTareasMetadata.PROYECTO+" = ?";
+    private static final String _SQL_TAREAS_X_PROYECTO = "SELECT " + ProyectoDBMetadata.TABLA_TAREAS_ALIAS + "." + ProyectoDBMetadata.TablaTareasMetadata._ID + " as " + ProyectoDBMetadata.TablaTareasMetadata._ID +
+            ", " + ProyectoDBMetadata.TablaTareasMetadata.TAREA +
+            ", " + ProyectoDBMetadata.TablaTareasMetadata.HORAS_PLANIFICADAS +
+            ", " + ProyectoDBMetadata.TablaTareasMetadata.MINUTOS_TRABAJADOS +
+            ", " + ProyectoDBMetadata.TablaTareasMetadata.FINALIZADA +
+            ", " + ProyectoDBMetadata.TablaTareasMetadata.PRIORIDAD +
+            ", " + ProyectoDBMetadata.TABLA_PRIORIDAD_ALIAS + "." + ProyectoDBMetadata.TablaPrioridadMetadata.PRIORIDAD + " as " + ProyectoDBMetadata.TablaPrioridadMetadata.PRIORIDAD_ALIAS +
+            ", " + ProyectoDBMetadata.TablaTareasMetadata.RESPONSABLE +
+            ", " + ProyectoDBMetadata.TABLA_USUARIOS_ALIAS + "." + ProyectoDBMetadata.TablaUsuariosMetadata.USUARIO + " as " + ProyectoDBMetadata.TablaUsuariosMetadata.USUARIO_ALIAS +
+            " FROM " + ProyectoDBMetadata.TABLA_PROYECTO + " " + ProyectoDBMetadata.TABLA_PROYECTO_ALIAS + ", " +
+            ProyectoDBMetadata.TABLA_USUARIOS + " " + ProyectoDBMetadata.TABLA_USUARIOS_ALIAS + ", " +
+            ProyectoDBMetadata.TABLA_PRIORIDAD + " " + ProyectoDBMetadata.TABLA_PRIORIDAD_ALIAS + ", " +
+            ProyectoDBMetadata.TABLA_TAREAS + " " + ProyectoDBMetadata.TABLA_TAREAS_ALIAS +
+            " WHERE " + ProyectoDBMetadata.TABLA_TAREAS_ALIAS + "." + ProyectoDBMetadata.TablaTareasMetadata.PROYECTO + " = " + ProyectoDBMetadata.TABLA_PROYECTO_ALIAS + "." + ProyectoDBMetadata.TablaProyectoMetadata._ID + " AND " +
+            ProyectoDBMetadata.TABLA_TAREAS_ALIAS + "." + ProyectoDBMetadata.TablaTareasMetadata.RESPONSABLE + " = " + ProyectoDBMetadata.TABLA_USUARIOS_ALIAS + "." + ProyectoDBMetadata.TablaUsuariosMetadata._ID + " AND " +
+            ProyectoDBMetadata.TABLA_TAREAS_ALIAS + "." + ProyectoDBMetadata.TablaTareasMetadata.PRIORIDAD + " = " + ProyectoDBMetadata.TABLA_PRIORIDAD_ALIAS + "." + ProyectoDBMetadata.TablaPrioridadMetadata._ID + " AND " +
+            ProyectoDBMetadata.TABLA_TAREAS_ALIAS + "." + ProyectoDBMetadata.TablaTareasMetadata.PROYECTO + " = ?";
 
     private ProyectoOpenHelper dbHelper;
-    private SQLiteDatabase db;
+    SQLiteDatabase db;
 
-    public ProyectoDAO(Context c){
+    public ProyectoDAO(Context c) {
         this.dbHelper = new ProyectoOpenHelper(c);
     }
 
-    public void open(){
-        this.open(false);
+    public SQLiteDatabase open() {
+        return this.open(false);
     }
 
-    public void open(Boolean toWrite){
-        if(toWrite) {
+    public SQLiteDatabase open(Boolean toWrite) {
+        if (toWrite) {
             db = dbHelper.getWritableDatabase();
-        }
-        else{
+            return db;
+        } else {
             db = dbHelper.getReadableDatabase();
+            return db;
         }
     }
 
     public void close(){
-        db = dbHelper.getReadableDatabase();
+        if(db != null)
+            db.close();
     }
 
+
     public Cursor listaTareas(Integer idProyecto){
+        SQLiteDatabase db = open();
         Cursor cursorPry = db.rawQuery("SELECT "+ProyectoDBMetadata.TablaProyectoMetadata._ID+ " FROM "+ProyectoDBMetadata.TABLA_PROYECTO,null);
         Integer idPry= 0;
         if(cursorPry.moveToFirst()){
@@ -111,9 +115,9 @@ public class ProyectoDAO {
         //Establecemos los campos-valores a actualizar
         ContentValues valores = new ContentValues();
         valores.put(ProyectoDBMetadata.TablaTareasMetadata.FINALIZADA,1);
-        SQLiteDatabase mydb =dbHelper.getWritableDatabase();
-        mydb.update(ProyectoDBMetadata.TABLA_TAREAS, valores, "_id=?", new String[]{idTarea.toString()});
-        mydb.close();
+        db = open(true);
+        db.update(ProyectoDBMetadata.TABLA_TAREAS, valores, "_id=?", new String[]{idTarea.toString()});
+        db.close();
     }
 
     public List<Tarea> listarDesviosPlanificacion(Boolean soloTerminadas,Integer desvioMaximoMinutos){
@@ -124,4 +128,10 @@ public class ProyectoDAO {
     }
 
 
+    public void agregarMinutos(int id, long minutos) {
+        //Establecemos los campos-valores a actualizar
+        db = open(true);
+        db.execSQL("UPDATE TAREA SET MINUTOS_TRABAJDOS=(MINUTOS_TRABAJDOS+?) WHERE _ID=?;",new String[]{String.valueOf(minutos), String.valueOf(id)});
+        db.close();
+    }
 }

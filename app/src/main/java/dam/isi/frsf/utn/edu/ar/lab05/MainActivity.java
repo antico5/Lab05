@@ -47,14 +47,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.d("LAB05-MAIN","en resume");
+        llenarLista();
+        Log.d("LAB05-MAIN","fin resume");
+    }
+
+    private void llenarLista(){
         proyectoDAO = new ProyectoDAO(MainActivity.this);
         proyectoDAO.open();
         cursor = proyectoDAO.listaTareas(1);
-        Log.d("LAB05-MAIN","mediol "+cursor.getCount());
-
         tca = new TareaCursorAdapter(MainActivity.this,cursor,proyectoDAO);
         lvTareas.setAdapter(tca);
-        Log.d("LAB05-MAIN","fin resume");
     }
 
     @Override
