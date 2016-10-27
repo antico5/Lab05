@@ -72,6 +72,22 @@ public class ProyectoDAO {
     }
 
     public void nuevaTarea(Tarea t){
+        String sql = "INSERT INTO " + ProyectoDBMetadata.TABLA_TAREAS
+                + " ("+ ProyectoDBMetadata.TablaTareasMetadata.TAREA + ","
+                + ProyectoDBMetadata.TablaTareasMetadata.HORAS_PLANIFICADAS + ","
+                + ProyectoDBMetadata.TablaTareasMetadata.MINUTOS_TRABAJADOS + ","
+                + ProyectoDBMetadata.TablaTareasMetadata.PRIORIDAD + ","
+                + ProyectoDBMetadata.TablaTareasMetadata.RESPONSABLE + ","
+                + ProyectoDBMetadata.TablaTareasMetadata.PROYECTO + ","
+                + ProyectoDBMetadata.TablaTareasMetadata.FINALIZADA + ")"
+                + " VALUES("
+                + "asdasd, "
+                + t.getHorasEstimadas() + ","
+                + t.getMinutosTrabajados() + ","
+                + t.getPrioridad().getId() + ","
+                + t.getResponsable().getId() + ","
+                + t.getProyecto().getId() + ","
+                + t.getFinalizada() + ")";
 
     }
 
