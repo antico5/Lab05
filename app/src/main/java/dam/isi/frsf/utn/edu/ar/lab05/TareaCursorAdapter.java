@@ -58,6 +58,7 @@ public class TareaCursorAdapter extends CursorAdapter {
 
         final Button btnFinalizar = (Button)   view.findViewById(R.id.tareaBtnFinalizada);
         final Button btnEditar = (Button)   view.findViewById(R.id.tareaBtnEditarDatos);
+        final Button btnBorrar = (Button)   view.findViewById(R.id.btnBorrar);
         ToggleButton btnEstado = (ToggleButton) view.findViewById(R.id.tareaBtnTrabajando);
 
         nombre.setText(cursor.getString(cursor.getColumnIndex(ProyectoDBMetadata.TablaTareasMetadata.TAREA)));
@@ -69,8 +70,11 @@ public class TareaCursorAdapter extends CursorAdapter {
         String p = cursor.getString(cursor.getColumnIndex(ProyectoDBMetadata.TablaPrioridadMetadata.PRIORIDAD_ALIAS));
         prioridad.setText(p);
         responsable.setText(cursor.getString(cursor.getColumnIndex(ProyectoDBMetadata.TablaUsuariosMetadata.USUARIO_ALIAS)));
-        finalizada.setChecked(cursor.getInt(cursor.getColumnIndex(ProyectoDBMetadata.TablaTareasMetadata.FINALIZADA))==1);
+        boolean tareaFinalizada = cursor.getInt(cursor.getColumnIndex(ProyectoDBMetadata.TablaTareasMetadata.FINALIZADA))==1;
+        finalizada.setChecked(tareaFinalizada);
         finalizada.setTextIsSelectable(false);
+        btnEstado.setEnabled(!tareaFinalizada);
+        btnEditar.setEnabled(!tareaFinalizada);
 
         btnEditar.setTag(id);
         btnEditar.setOnClickListener(new View.OnClickListener() {
@@ -115,6 +119,15 @@ public class TareaCursorAdapter extends CursorAdapter {
 
                 }
 
+            }
+        });
+
+        btnBorrar.setTag(id);
+        btnBorrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int id = (int) v.getTag();
+                myDao.borrarTarea(id);
             }
         });
     }

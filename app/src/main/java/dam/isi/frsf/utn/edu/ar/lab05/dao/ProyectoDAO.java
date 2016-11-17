@@ -117,7 +117,11 @@ public class ProyectoDAO {
         db.close();
     }
 
-    public void borrarTarea(Tarea t){
+    public void borrarTarea(Integer id){
+        String sql = "DELETE FROM TAREA WHERE _id = ?";
+        db = open(true);
+        db.execSQL(sql, new String[] {id.toString()});
+        db.close();
 
     }
 

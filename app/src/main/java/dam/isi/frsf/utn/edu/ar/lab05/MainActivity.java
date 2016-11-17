@@ -41,6 +41,14 @@ public class MainActivity extends AppCompatActivity {
         });
         lvTareas = (ListView) findViewById(R.id.listaTareas);
 
+        FloatingActionButton fabBuscar = (FloatingActionButton) findViewById(R.id.fabBuscar);
+        fabBuscar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(MainActivity.this,BuscarActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
