@@ -62,6 +62,24 @@ public class ProyectoDAO {
             db.close();
     }
 
+    public Tarea buscarTarea(Integer id){
+        Log.d("ID_TAREA", id.toString());
+        SQLiteDatabase db = open();
+        Tarea tarea = new Tarea();
+        String sql = "select _id, DESCRIPCION, HORAS_PLANIFICADAS, MINUTOS_TRABAJDOS, ID_PRIORIDAD, ID_RESPONSABLE, FINALIZADA from TAREA where _id = ?";
+        Cursor cursor = db.rawQuery(sql, new String[]{id.toString()});
+        cursor.moveToFirst();
+        tarea.setId(cursor.getInt(0));
+        tarea.setDescripcion(cursor.getString(1));
+        tarea.setHorasEstimadas(cursor.getInt(2));
+        tarea.setMinutosTrabajados(cursor.getInt(3));
+        tarea.setIdPrioridad(cursor.getInt(4));
+        tarea.setIdResponsable(cursor.getInt(5));
+        tarea.setFinalizada(cursor.getInt(6) == 1);
+        Log.d("Tarea", tarea.toString());
+        return tarea;
+    }
+
 
     public Cursor listaTareas(Integer idProyecto){
         SQLiteDatabase db = open();
@@ -93,7 +111,10 @@ public class ProyectoDAO {
     }
 
     public void actualizarTarea(Tarea t){
-
+        String sql = "UPDATE TAREA SET DESCRIPCION=?, HORAS_PLANIFICADAS=?, MINUTOS_TRABAJDOS=?, ID_PRIORIDAD=?, ID_RESPONSABLE=?, ID_PROYECTO=?, FINALIZADA=? WHERE _id=?";
+        db = open(true);
+        db.execSQL(sql, new String[]{t.getDescripcion(), t.getHorasEstimadas().toString(), "0", t.getIdPrioridad().toString(), t.getIdResponsable().toString(), "1", t.getFinalizada().toString(), t.getId().toString()});
+        db.close();
     }
 
     public void borrarTarea(Tarea t){

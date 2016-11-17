@@ -32,10 +32,16 @@ public class AltaTareaActivity extends AppCompatActivity {
     Cursor usuarios;
     SimpleCursorAdapter adapter;
 
+    Integer idTarea;
+    Tarea tarea;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alta_tarea);
+
+        idTarea = getIntent().getIntExtra("ID_TAREA", 0);
+        dao = new ProyectoDAO(this);
 
         // linkear componentes del layout
         descripcion = (EditText) findViewById(R.id.descripcion);
@@ -45,12 +51,20 @@ public class AltaTareaActivity extends AppCompatActivity {
         btnGuardar = (Button) findViewById(R.id.btnGuardar);
         btnCancelar = (Button) findViewById(R.id.btnCancelar);
 
-        //responsables
-        dao = new ProyectoDAO(this);
+        //Spinner responsables
         usuarios = dao.listarUsuarios();
         adapter = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, usuarios, new String[] {"NOMBRE"}, new int[] { android.R.id.text1 }, 0);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         responsable.setAdapter(adapter);
+
+        //llenar los campos
+        if(editando()){
+            tarea = dao.buscarTarea(idTarea);
+            descripcion.setText(tarea.getDescripcion());
+            horasEstimadas.setText(tarea.getHorasEstimadas().toString());
+            prioridad.setProgress(tarea.getIdPrioridad() - 1);
+            responsable.setSelection(tarea.getIdResponsable() - 1);
+        }
 
         //click guardar
         btnGuardar.setOnClickListener(new View.OnClickListener() {
@@ -60,19 +74,35 @@ public class AltaTareaActivity extends AppCompatActivity {
                 Log.d("prioridad",""+prioridad.getProgress());
                 Log.d("estimadas",horasEstimadas.getText().toString());
 
-                Tarea tarea = new Tarea();
+                if(!editando())
+                    tarea = new Tarea();
+
                 tarea.setDescripcion(descripcion.getText().toString());
-                tarea.setHorasEstimadas(Integer.valueOf(horasEstimadas.getText().toString()) + 1);
-                tarea.setIdPrioridad(prioridad.getProgress());
+                tarea.setHorasEstimadas(Integer.valueOf(horasEstimadas.getText().toString()));
+                tarea.setIdPrioridad(prioridad.getProgress() +1);
                 tarea.setIdResponsable((int) responsable.getSelectedItemId());
 
-                dao.nuevaTarea(tarea);
-
-
+                if(editando())
+                    dao.actualizarTarea(tarea);
+                else
+                    dao.nuevaTarea(tarea);
+                finish();
 
             }
         });
 
+        //click cancelar
+        btnCancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
+
+    }
+
+    private boolean editando(){
+        return idTarea != 0;
     }
 }

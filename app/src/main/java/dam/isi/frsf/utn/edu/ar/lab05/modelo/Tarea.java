@@ -120,4 +120,8 @@ public class Tarea {
     public void setIdResponsable(Integer idResponsable) {
         this.idResponsable = idResponsable;
     }
+
+    public String toString(){
+        return descripcion + " " + horasEstimadas + " " + minutosTrabajados + " " + finalizada + " " + idResponsable + " " + idPrioridad;
+    }
 }
