@@ -5,27 +5,38 @@ package dam.isi.frsf.utn.edu.ar.lab05.modelo;
  */
 public class Tarea {
 
+    private String descripcion;
     private Integer id;
-    private Boolean terminada;
     private Integer horasEstimadas;
     private Integer minutosTrabajados;
     private Boolean finalizada;
     private Proyecto proyecto;
     private Prioridad prioridad;
+    private Integer idPrioridad;
     private Usuario responsable;
+    private Integer idResponsable;
 
     public Tarea() {
+        descripcion = "";
+        id = 0;
+        finalizada = false;
+        horasEstimadas = 0;
+        minutosTrabajados = 0;
+        idPrioridad = 1;
+        idResponsable = 1;
     }
 
-    public Tarea(Integer id, Boolean terminada, Integer horasEstimadas, Integer minutosTrabajados, Boolean finalizada, Proyecto proyecto, Prioridad prioridad, Usuario responsable) {
+    public Tarea(Integer id, String descripcion, Integer horasEstimadas, Integer minutosTrabajados, Boolean finalizada, Proyecto proyecto, Prioridad prioridad, Usuario responsable) {
         this.id = id;
-        this.terminada = terminada;
         this.horasEstimadas = horasEstimadas;
         this.minutosTrabajados = minutosTrabajados;
         this.finalizada = finalizada;
         this.proyecto = proyecto;
         this.prioridad = prioridad;
+        this.idPrioridad = 1;
+        this.idResponsable = 1;
         this.responsable = responsable;
+        this.descripcion = descripcion;
     }
 
     public Integer getId() {
@@ -34,14 +45,6 @@ public class Tarea {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Boolean getTerminada() {
-        return terminada;
-    }
-
-    public void setTerminada(Boolean terminada) {
-        this.terminada = terminada;
     }
 
     public Integer getHorasEstimadas() {
@@ -82,6 +85,7 @@ public class Tarea {
 
     public void setPrioridad(Prioridad prioridad) {
         this.prioridad = prioridad;
+        this.idPrioridad = prioridad.getId();
     }
 
     public Usuario getResponsable() {
@@ -90,5 +94,30 @@ public class Tarea {
 
     public void setResponsable(Usuario responsable) {
         this.responsable = responsable;
+        this.idResponsable = responsable.getId();
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public Integer getIdPrioridad() {
+        return idPrioridad;
+    }
+
+    public void setIdPrioridad(Integer idPrioridad) {
+        this.idPrioridad = idPrioridad;
+    }
+
+    public Integer getIdResponsable() {
+        return idResponsable;
+    }
+
+    public void setIdResponsable(Integer idResponsable) {
+        this.idResponsable = idResponsable;
     }
 }

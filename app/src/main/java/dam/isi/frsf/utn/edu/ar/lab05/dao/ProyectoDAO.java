@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import dam.isi.frsf.utn.edu.ar.lab05.modelo.Prioridad;
@@ -84,14 +85,10 @@ public class ProyectoDAO {
                 + ProyectoDBMetadata.TablaTareasMetadata.RESPONSABLE + ","
                 + ProyectoDBMetadata.TablaTareasMetadata.PROYECTO + ","
                 + ProyectoDBMetadata.TablaTareasMetadata.FINALIZADA + ")"
-                + " VALUES("
-                + "asdasd, "
-                + t.getHorasEstimadas() + ","
-                + t.getMinutosTrabajados() + ","
-                + t.getPrioridad().getId() + ","
-                + t.getResponsable().getId() + ","
-                + t.getProyecto().getId() + ","
-                + t.getFinalizada() + ")";
+                + " VALUES(?,?,?,?,?,?,?)";
+        db = open(true);
+        db.execSQL(sql, new String[]{t.getDescripcion(), t.getHorasEstimadas().toString(), "0", t.getIdPrioridad().toString(), t.getIdResponsable().toString(), "1", t.getFinalizada().toString()});
+        db.close();
 
     }
 
@@ -107,8 +104,27 @@ public class ProyectoDAO {
         return null;
     }
 
-    public List<Usuario> listarUsuarios(){
-        return null;
+    public Cursor listarUsuarios(){
+        String sql = "SELECT _ID, NOMBRE FROM USUARIOS";
+        db = open();
+        //Cursor cursor = db.query(true,"USUARIOS", new String[]{"_id", "nombre"},null,null,null,null,null,null);
+        Cursor cursor = db.rawQuery(sql,null);
+        Log.d("asd", "RESULTADOS: " + cursor.getCount());
+        for(String columna : cursor.getColumnNames()){
+            Log.d("asd", "COLUMNA: " + columna);
+        }
+        /*List<Usuario> usuarios= new ArrayList<Usuario>();
+        cursor.moveToFirst();
+        do {
+            Usuario usuario = new Usuario();
+            usuario.setId(cursor.getInt(0));
+            usuario.setNombre(cursor.getString(1));
+
+            usuarios.add(usuario);
+        } while (cursor.moveToNext());
+
+        return usuarios;*/
+        return cursor;
     }
 
     public void finalizar(Integer idTarea){
