@@ -19,7 +19,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".AltaTareaActivity" />
-        <activity android:name=".BuscarActivity"></activity>
+        <activity android:name=".BuscarActivity" />
+        <activity android:name=".BuscarContactosActivity"></activity>
     </application>
 
 </manifest>

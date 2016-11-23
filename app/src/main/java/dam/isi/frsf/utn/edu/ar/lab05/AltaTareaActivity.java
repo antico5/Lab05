@@ -1,5 +1,6 @@
 package dam.isi.frsf.utn.edu.ar.lab05;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ public class AltaTareaActivity extends AppCompatActivity {
     Spinner responsable;
     Button btnGuardar;
     Button btnCancelar;
+    Button btnContacto;
     Cursor usuarios;
     SimpleCursorAdapter adapter;
 
@@ -50,6 +52,7 @@ public class AltaTareaActivity extends AppCompatActivity {
         responsable = (Spinner) findViewById(R.id.responsable);
         btnGuardar = (Button) findViewById(R.id.btnGuardar);
         btnCancelar = (Button) findViewById(R.id.btnCancelar);
+        btnContacto = (Button) findViewById(R.id.btnContacto);
 
         //Spinner responsables
         usuarios = dao.listarUsuarios();
@@ -96,6 +99,14 @@ public class AltaTareaActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        btnContacto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = getIntent();
+
             }
         });
 
