@@ -105,7 +105,8 @@ public class AltaTareaActivity extends AppCompatActivity {
         btnContacto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = getIntent();
+                Intent i = new Intent(AltaTareaActivity.this,BuscarContactosActivity.class);
+                startActivity(i);
 
             }
         });
