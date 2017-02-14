@@ -2,6 +2,7 @@ package dam.isi.frsf.utn.edu.ar.lab05.dao;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -165,7 +166,33 @@ public class ProyectoDAO {
         // retorna una lista de todas las tareas que tardaron más (en exceso) o menos (por defecto)
         // que el tiempo planificado.
         // si la bandera soloTerminadas es true, se busca en las tareas terminadas, sino en todas.
-        return null;
+
+        List<Tarea> lista = new ArrayList<>();
+
+        String sql = "select _id, DESCRIPCION, HORAS_PLANIFICADAS, MINUTOS_TRABAJDOS, ID_PRIORIDAD, ID_RESPONSABLE, FINALIZADA " +
+                "from TAREA " +
+                "where FINALIZADA = ? " +
+                "and MINUTOS_TRABAJDOS between (HORAS_PLANIFICADAS - ?) and (HORAS_PLANIFICADAS + ?)";
+
+        db = open(true);
+
+        Cursor cursor = db.rawQuery(sql, new String[]{(soloTerminadas) ? "1" : "false", desvioMaximoMinutos.toString(), desvioMaximoMinutos.toString()});
+        cursor.moveToPosition(-1);
+        while (cursor.moveToNext()) {
+            Tarea tarea = new Tarea();
+            tarea.setId(cursor.getInt(0));
+            tarea.setDescripcion(cursor.getString(1));
+            tarea.setHorasEstimadas(cursor.getInt(2));
+            tarea.setMinutosTrabajados(cursor.getInt(3));
+            tarea.setIdPrioridad(cursor.getInt(4));
+            tarea.setIdResponsable(cursor.getInt(5));
+            tarea.setFinalizada(cursor.getInt(6) == 1);
+
+            lista.add(tarea);
+        }
+        db.close();
+
+        return lista;
     }
 
 

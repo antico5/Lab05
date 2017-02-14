@@ -37,4 +37,16 @@
         android:layout_height="wrap_content"
         android:id="@+id/btnBuscar" />
 
+    <TextView
+        android:text="Resultado de la Búsqueda"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView10" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rdoBusqueda"
+        android:textAppearance="@style/TextAppearance.AppCompat" />
+
 </LinearLayout>

@@ -14,6 +14,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import dam.isi.frsf.utn.edu.ar.lab05.dao.ProyectoDAO;
@@ -128,6 +129,8 @@ public class TareaCursorAdapter extends CursorAdapter {
             public void onClick(View v) {
                 int id = (int) v.getTag();
                 myDao.borrarTarea(id);
+                Toast toast = Toast.makeText(v.getContext(), "Tarea Borrada. Recarga la vista para ver los cambios.", Toast.LENGTH_LONG);
+                toast.show();
             }
         });
     }
